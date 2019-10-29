@@ -4,10 +4,10 @@ import scrapy
 from Apartment import Apartment
 
 
-def css_selector_value(response, selector):
-    value = response.css(selector).get()
+def css_selector_value(response, selector, element_index=0):
+    value = response.css(selector).extract()
     if value:
-        return value.strip()
+        return value[element_index].strip()
     else:
         return None
 
@@ -66,6 +66,8 @@ class ImmoScoutSpider(scrapy.Spider):
         title = css_selector_value(response, '#expose-title::text')
         cold_rent = css_selector_value(response, '.is24qa-kaltmiete::text')
         total_rent = css_selector_value(response, '.is24qa-gesamtmiete::text')
+        utility_cost = css_selector_value(response, '.is24qa-nebenkosten::text', 1)
+        heating_cost = css_selector_value(response, '.is24qa-heizkosten::text', 1)
         heating_included = "zzgl. Heizkosten" not in total_rent
         area = css_selector_value(response, '.is24qa-flaeche::text')
         rooms = css_selector_value(response, '.is24qa-zi::text')
@@ -75,7 +77,8 @@ class ImmoScoutSpider(scrapy.Spider):
         description = css_selector_value(response, '.is24qa-objektbeschreibung::text')
         images = response.css('img.sp-image::attr(data-src)').getall()
         yield Apartment(title=title, cold_rent=get_number(cold_rent),
-                        total_rent=get_number(total_rent), heating_included=heating_included,
+                        total_rent=get_number(total_rent), utility_cost=get_number(utility_cost),
+                        heating_cost=get_number(heating_cost), heating_included=heating_included,
                         area=get_number(area), rooms=get_number(rooms), address=address,
                         description=description, link=response.url, images=images)
 

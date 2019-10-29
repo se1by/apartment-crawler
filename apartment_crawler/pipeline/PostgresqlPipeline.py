@@ -32,6 +32,8 @@ class PostgresqlPipeline(object):
                     rooms NUMERIC(5,2),
                     cold_rent NUMERIC(7,2) NOT NULL,
                     total_rent NUMERIC(7,2),
+                    utility_cost NUMERIC(6, 2),
+                    heating_cost NUMERIC(6, 2),
                     heating_included BOOLEAN,
                     address VARCHAR(256) NOT NULL,
                     description VARCHAR(5120),
@@ -55,14 +57,15 @@ class PostgresqlPipeline(object):
             raise ValueError('PostgresqlPipeline can only handle apartment items!')
 
         with self.conn.cursor() as cursor:
-            cursor.execute('INSERT INTO apartment VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, DEFAULT)'
+            cursor.execute('INSERT INTO apartment VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, DEFAULT)'
                            'ON CONFLICT (link) DO UPDATE SET title = %s, area = %s, rooms = %s, cold_rent = %s,'
-                           'total_rent = %s, heating_included = %s, address = %s, description = %s;',
+                           'total_rent = %s, utility_cost = %s, heating_cost = %s, heating_included = %s,'
+                           ' address = %s, description = %s;',
                            [item['link'], item['title'], item['area'], item['rooms'], item['cold_rent'],
-                            item['total_rent'], item['heating_included'],
+                            item['total_rent'], item['utility_cost'], item['heating_cost'], item['heating_included'],
                             item['address'], item['description'], item['title'], item['area'], item['rooms'],
-                            item['cold_rent'], item['total_rent'], item['heating_included'],
-                            item['address'], item['description']])
+                            item['cold_rent'], item['total_rent'], item['utility_cost'],
+                            item['heating_cost'], item['heating_included'], item['address'], item['description']])
             for index, image in enumerate(item['images']):
                 cursor.execute('INSERT INTO images VALUES(%s, %s, %s) ON CONFLICT DO NOTHING;',
                                [item['link'], image, index])
