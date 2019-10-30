@@ -16,7 +16,7 @@ def get_number(number_string):
     result_array = re.findall(r'\d+(?:[,.]?\d)*', number_string)
     if len(result_array) == 0:
         return 0
-    result = result_array[0]
+    result = max(result_array)
     if len(result) == 1 or ('.' not in result and ',' not in result):
         return result
 
