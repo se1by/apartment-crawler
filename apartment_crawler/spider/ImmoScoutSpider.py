@@ -13,8 +13,22 @@ def css_selector_value(response, selector, element_index=0):
 
 
 def get_number(number_string):
-    result = re.findall(r'\d+[,.]?\d*', number_string)
-    return result[0].replace('.', '').replace(',', '.') if len(result) > 0 else 0
+    result_array = re.findall(r'\d+(?:[,.]?\d)*', number_string)
+    if len(result_array) == 0:
+        return 0
+    result = result_array[0]
+    if len(result) == 1 or ('.' not in result and ',' not in result):
+        return result
+
+    if result[-3] == ',' or result[-3] == '.':
+        result = result.replace(',', '').replace('.', '')
+        return result[:-2] + '.' + result[-2:]
+    elif result[-2] == ',' or result[-2] == '.':
+        result = result.replace(',', '').replace('.', '')
+        return result[:-1] + '.' + result[-1:]
+    else:
+        result = result.replace(',', '').replace('.', '')
+        return result
 
 
 class ImmoScoutSpider(scrapy.Spider):

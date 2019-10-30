@@ -4,6 +4,7 @@ import unittest
 
 from scrapy.http import Request, HtmlResponse
 from spider.ImmoScoutSpider import ImmoScoutSpider
+from spider.ImmoScoutSpider import get_number
 
 
 class ImmoScoutSpiderTest(unittest.TestCase):
@@ -22,6 +23,16 @@ class ImmoScoutSpiderTest(unittest.TestCase):
         self.assertEqual('https://www.immobilienscout24.de/Suche/S-T/Wohnung-Miete/Hamburg/Hamburg'
                          '/Wandsbek/-/56,00-/EURO--1200,00',
                          ImmoScoutSpider.generate_url("Hamburg", "Hamburg", "Wandsbek", 56, 1200))
+
+    def test_parses_correct_numbers(self):
+        self.assertEqual(get_number('2'), '2')
+        self.assertEqual(get_number('20'), '20')
+        self.assertEqual(get_number('20,4'), '20.4')
+        self.assertEqual(get_number('20.4'), '20.4')
+        self.assertEqual(get_number('20.45 €'), '20.45')
+        self.assertEqual(get_number('20,45 €'), '20.45')
+        self.assertEqual(get_number('20.4 m²'), '20.4')
+        self.assertEqual(get_number('in Nebenkosten enthalten'), 0)
 
 
 def load_fake_response(file_name, url=None):
