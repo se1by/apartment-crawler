@@ -83,6 +83,7 @@ class ImmoScoutSpider(scrapy.Spider):
         utility_cost = css_selector_value(response, '.is24qa-nebenkosten::text', 1)
         heating_cost = css_selector_value(response, '.is24qa-heizkosten::text', 1)
         heating_included = "zzgl. Heizkosten" not in total_rent
+        deposit = css_selector_value(response, '.is24qa-kaution-o-genossenschaftsanteile::text')
         area = css_selector_value(response, '.is24qa-flaeche::text')
         rooms = css_selector_value(response, '.is24qa-zi::text')
         street = css_selector_value(response, '.address-block span::text')
@@ -93,6 +94,6 @@ class ImmoScoutSpider(scrapy.Spider):
         yield Apartment(title=title, cold_rent=get_number(cold_rent),
                         total_rent=get_number(total_rent), utility_cost=get_number(utility_cost),
                         heating_cost=get_number(heating_cost), heating_included=heating_included,
-                        area=get_number(area), rooms=get_number(rooms), address=address,
+                        deposit=get_number(deposit), area=get_number(area), rooms=get_number(rooms), address=address,
                         description=description, link=response.url, images=images)
 

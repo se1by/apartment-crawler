@@ -8,6 +8,7 @@ class Apartment(scrapy.Item):
     utility_cost = scrapy.Field()
     heating_cost = scrapy.Field()
     heating_included = scrapy.Field()
+    deposit = scrapy.Field()
     area = scrapy.Field()
     rooms = scrapy.Field()
     address = scrapy.Field()
