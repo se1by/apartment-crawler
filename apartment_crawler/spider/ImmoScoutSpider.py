@@ -51,7 +51,7 @@ class ImmoScoutSpider(scrapy.Spider):
             districts = [districts]
 
         districts_string = '_'.join(districts).replace('ä', 'ae').replace('ö', 'oe')\
-            .replace('ü', 'ue').replace('ß', 'ss') if len(districts) > 0 else ''
+            .replace('ü', 'ue').replace('ß', 'ss') if len(districts) > 0 else '-'
 
         def format_number(number):
             return '{0:.2f}'.format(number).replace('.', ',') if number > 0 else ''
