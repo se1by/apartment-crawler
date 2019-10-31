@@ -71,6 +71,8 @@ class ImmoScoutSpider(scrapy.Spider):
 
     def parse(self, response):
         for url in response.css('.result-list__listing a.result-list-entry__brand-title-container'):
+            if '/expose/' not in url.get():
+                continue
             yield response.follow(url, ImmoScoutSpider.parse_listing)
         for next_page in response.css('a[data-nav-next-page="true"]'):
             yield response.follow(next_page, self.parse)
