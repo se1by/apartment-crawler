@@ -34,6 +34,7 @@ class ImmoScoutSpiderTest(unittest.TestCase):
         self.assertEqual(get_number('20.4 m²'), '20.4')
         self.assertEqual(get_number('in Nebenkosten enthalten'), 0)
         self.assertEqual(get_number('3 Nettokalt - Mieten ( € 3.075,- )'), '3075')
+        self.assertEqual(get_number(None), 0)
 
 
 def load_fake_response(file_name, url=None):

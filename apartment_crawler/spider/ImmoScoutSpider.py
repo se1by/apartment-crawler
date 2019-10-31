@@ -13,6 +13,8 @@ def css_selector_value(response, selector, element_index=0):
 
 
 def get_number(number_string):
+    if number_string is None:
+        return 0
     result_array = re.findall(r'\d+(?:[,.]?\d)*', number_string)
     if len(result_array) == 0:
         return 0
